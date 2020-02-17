@@ -5,18 +5,17 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.1.2.RELEASE</version>
+		<version>2.2.2.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>io.javabrains</groupId>
-	<artifactId>movie-splitMovie-service</artifactId>
+	<artifactId>dataBaseMovie</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>movie-splitMovie-service</name>
-	<description>Split movie in chunck of bytes</description>
+	<name>dataBaseMovie</name>
+	<description>Microservice which write in movie Data Base.</description>
 
 	<properties>
 		<java.version>1.8</java.version>
-		<spring-cloud.version>Greenwich.RELEASE</spring-cloud.version>
 	</properties>
 
 	<dependencies>
@@ -24,14 +23,14 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-webflux</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-		</dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-netflix-eureka-client -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+            <version>2.2.1.RELEASE</version>
+        </dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -44,13 +43,21 @@
 			<version>1.18.8</version>
 			<scope>provided</scope>
 		</dependency>
+
 		<dependency>
-			<groupId>com.vaadin.external.google</groupId>
-			<artifactId>android-json</artifactId>
-			<version>0.0.20131108.vaadin1</version>
-			<scope>compile</scope>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jdbc</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-core</artifactId>
+		</dependency>
 
 	</dependencies>
 
