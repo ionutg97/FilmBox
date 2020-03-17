@@ -16,7 +16,7 @@ public class CommentWebSocketController {
 
     @MessageMapping("/comment")
     @SendTo("/topic/comment")
-    public Comment greeting(Comment comment) throws Exception {
+    public Comment addComment(Comment comment) throws Exception {
 
         commentService.save(comment);
 
