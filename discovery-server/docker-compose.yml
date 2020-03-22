@@ -1,0 +1,33 @@
+version: '2.1'
+
+services:
+  springboot-docker-compose-app-container:
+    image: discovery-server:1
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - "8761:8761"
+
+  postgres:
+    image: postgres
+    network_mode: bridge
+    container_name: postgres_container
+    volumes:
+      - ../movie-commentary-service/src/main/resources/sql/dataStorage:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=comments
+
+  movie-commentary-service:
+    image: movie-commentary-service
+    build:
+      context: ../movie-commentary-service
+      dockerfile: Dockerfile
+    ports:
+      - "8087:8087"
+    depends_on:
+      - postgres

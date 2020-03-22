@@ -1,0 +1,3 @@
+DELETE  FROM movies;
+ALTER TABLE movies
+ADD video_id VARCHAR(100) NOT NULL UNIQUE;

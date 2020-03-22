@@ -41,7 +41,8 @@ public class DataBaseRepository {
                 .addValue("number_chunks", movie.getNumberOfFiles())
                 .addValue("total_size", movie.getTotalSizeFile())
                 .addValue("chunk_size", movie.getChunckSize())
-                .addValue("id_blob_storage", movie.getIdBlobStorage());
+                .addValue("id_blob_storage", movie.getIdBlobStorage())
+                .addValue("video_id",movie.getVideoId());
 
         int result = namedParameterJdbcTemplate.update(MovieQueries.INSERT_MOVIE, parameters, keyHolder);
         List<Map<String, Object>> keyList = keyHolder.getKeyList();

@@ -1,8 +1,10 @@
 package io.javabrains.moviesplitMovieservice.controller;
 
+import io.javabrains.moviesplitMovieservice.models.Chunck;
 import io.javabrains.moviesplitMovieservice.models.SplitMovie;
 import io.javabrains.moviesplitMovieservice.service.SplitMovieService;
 import lombok.extern.slf4j.Slf4j;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,14 +25,13 @@ public class SplitMovieController {
     private RestTemplate restTemplate;
 
     @Autowired
-    public SplitMovieController(SplitMovieService splitMovieService)
-    {
-        this.splitMovieService=splitMovieService;
+    public SplitMovieController(SplitMovieService splitMovieService) {
+        this.splitMovieService = splitMovieService;
     }
 
     @PostConstruct
     void init() {
-        restTemplate=new RestTemplate();
+        restTemplate = new RestTemplate();
     }
 
     @GetMapping("/verify")
@@ -41,30 +42,60 @@ public class SplitMovieController {
 
 
     @GetMapping()
-    public ResponseEntity<SplitMovie> getSplitMovieInFiles(@RequestParam("pathFileName") String pathName){
+    public ResponseEntity<SplitMovie> getSplitMovieInFiles(@RequestParam("pathFileName") String pathName) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         log.info("controller split movie file into many files of fixed size");
 
-        SplitMovie movieSplited = splitMovieService.splitMovie1(pathName);
+        SplitMovie movieSplited = splitMovieService.splitMovie(pathName);
 
-        JSONObject body = new JSONObject();
+        //storage metadata in DataBaseMovie
+        JSONObject body = getDataBaseBodyRequestJSON(movieSplited);
+        HttpEntity<String> request = new HttpEntity<>(body.toString(), headers);
+        restTemplate.postForEntity("http://localhost:8086/movie", request, String.class);
+
+        //storage chuncks in MongoDataBaseMovie
+        JSONObject bodyMongo = getMongoBodyRequestJSON(movieSplited);
+        HttpEntity<String> requestMongo = new HttpEntity<>(bodyMongo.toString(), headers);
+        restTemplate.postForEntity("http://localhost:8087/mongo/save_chuncks", requestMongo, String.class);
+
+
+        return new ResponseEntity<>(movieSplited, HttpStatus.OK);
+    }
+
+
+    private JSONObject getMongoBodyRequestJSON(SplitMovie movieSplited)
+    {
+        JSONArray array = new JSONArray();
+        for (Chunck item: movieSplited.getListOfChunks()) {
+            array.put(item);
+        }
+
+        JSONObject bodyMongo = new JSONObject();
         try {
-            body.put("fileName", movieSplited.getFileName() );
-            body.put("numberOfFiles", movieSplited.getNumberOfFiles());
-            body.put("totalSizeFile", movieSplited.getTotalSizeFile() );
-            body.put("chunckSize", movieSplited.getChunckSize());
-            body.put("idBlobStorage",123456);
+            bodyMongo.put("listOfChuncks", array);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        //storage data in DataBaseMovie
-        HttpEntity<String> request = new HttpEntity<>(body.toString(), headers);
-        restTemplate.postForEntity("http://localhost:8086/movie",request,String.class );
 
-        return new ResponseEntity<>(movieSplited,HttpStatus.OK);
+        return bodyMongo;
     }
 
+    private JSONObject getDataBaseBodyRequestJSON(SplitMovie movieSplited)
+    {
+        JSONObject body = new JSONObject();
+        try {
+            body.put("fileName", movieSplited.getFileName());
+            body.put("numberOfFiles", movieSplited.getNumberOfFiles());
+            body.put("totalSizeFile", movieSplited.getTotalSizeFile());
+            body.put("chunckSize", movieSplited.getChunckSize());
+            body.put("idBlobStorage", 123456);
+            body.put("videoId", movieSplited.getVideoId());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return body;
+    }
 
 }

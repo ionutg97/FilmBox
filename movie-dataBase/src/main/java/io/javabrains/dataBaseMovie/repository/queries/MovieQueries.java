@@ -7,7 +7,8 @@ public class MovieQueries {
             "number_chunks, " +
             "total_size, " +
             "chunk_size, " +
-            "id_blob_storage" +
+            "id_blob_storage," +
+            "video_id"+
             ") "+
             "VALUES " +
             "( " +
@@ -15,7 +16,8 @@ public class MovieQueries {
             ":number_chunks," +
             ":total_size," +
             ":chunk_size," +
-            ":id_blob_storage" +
+            ":id_blob_storage," +
+            ":video_id"+
             " )";
 
 }

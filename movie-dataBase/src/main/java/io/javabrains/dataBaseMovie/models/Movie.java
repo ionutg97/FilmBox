@@ -19,4 +19,6 @@ public class Movie {
     private Long chunckSize;
 
     private Long idBlobStorage;
+
+    private String videoId;
 }
