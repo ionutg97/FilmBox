@@ -22,5 +22,11 @@ public class PersistanceMongoService {
         }
         return chuncks;
     }
+
+    public ListChunckDTO getChuncks(String id) {
+        ListChunckDTO listChunckDTO = new ListChunckDTO();
+        listChunckDTO.setListOfChuncks(chunckRepositoryMongo.findByVideoId(id));
+        return listChunckDTO;
+    }
 }
 

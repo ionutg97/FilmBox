@@ -12,7 +12,6 @@ public class Chunck {
 
     @Id
     public String id;
-
     private String videoId;
     private String videoChunck;
 

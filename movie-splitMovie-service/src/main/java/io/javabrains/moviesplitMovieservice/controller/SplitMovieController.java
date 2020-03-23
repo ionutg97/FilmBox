@@ -49,6 +49,7 @@ public class SplitMovieController {
         log.info("controller split movie file into many files of fixed size");
 
         SplitMovie movieSplited = splitMovieService.splitMovie(pathName);
+        splitMovieService.saveChuncksInFile(movieSplited,pathName);
 
         //storage metadata in DataBaseMovie
         JSONObject body = getDataBaseBodyRequestJSON(movieSplited);
@@ -70,7 +71,7 @@ public class SplitMovieController {
             JSONArray array = new JSONArray();
             for (Chunck item : movieSplited.getListOfChunks()) {
                 JSONObject itemJSON = new JSONObject();
-                itemJSON.put("videoId", item.getId());
+                itemJSON.put("videoId", item.getVideoId());
                 itemJSON.put("videoChunck", item.getVideoChunck());
 
                 array.put(itemJSON);
