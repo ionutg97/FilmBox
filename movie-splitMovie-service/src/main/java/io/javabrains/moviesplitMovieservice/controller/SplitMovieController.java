@@ -60,20 +60,21 @@ public class SplitMovieController {
         HttpEntity<String> requestMongo = new HttpEntity<>(bodyMongo.toString(), headers);
         restTemplate.postForEntity("http://localhost:8087/mongo/save_chuncks", requestMongo, String.class);
 
-
         return new ResponseEntity<>(movieSplited, HttpStatus.OK);
     }
 
 
-    private JSONObject getMongoBodyRequestJSON(SplitMovie movieSplited)
-    {
-        JSONArray array = new JSONArray();
-        for (Chunck item: movieSplited.getListOfChunks()) {
-            array.put(item);
-        }
-
+    private JSONObject getMongoBodyRequestJSON(SplitMovie movieSplited) {
         JSONObject bodyMongo = new JSONObject();
         try {
+            JSONArray array = new JSONArray();
+            for (Chunck item : movieSplited.getListOfChunks()) {
+                JSONObject itemJSON = new JSONObject();
+                itemJSON.put("videoId", item.getId());
+                itemJSON.put("videoChunck", item.getVideoChunck());
+
+                array.put(itemJSON);
+            }
             bodyMongo.put("listOfChuncks", array);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -82,8 +83,7 @@ public class SplitMovieController {
         return bodyMongo;
     }
 
-    private JSONObject getDataBaseBodyRequestJSON(SplitMovie movieSplited)
-    {
+    private JSONObject getDataBaseBodyRequestJSON(SplitMovie movieSplited) {
         JSONObject body = new JSONObject();
         try {
             body.put("fileName", movieSplited.getFileName());

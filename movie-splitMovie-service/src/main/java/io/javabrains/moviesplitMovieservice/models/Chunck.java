@@ -7,7 +7,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class  Chunck {
+public class Chunck {
     public String id;
 
     private String videoId;
