@@ -1,0 +1,13 @@
+spring:
+  application:
+    name : ratings-splitMovie-service
+server:
+  port: 8084
+
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl.defaultZone: http://eureka-service:8761/eureka

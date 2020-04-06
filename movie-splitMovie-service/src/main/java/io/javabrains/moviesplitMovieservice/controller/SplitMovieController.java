@@ -9,6 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
+import org.springframework.security.crypto.codec.Utf8;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -36,13 +37,13 @@ public class SplitMovieController {
 
     @GetMapping("/verify")
     public ResponseEntity<String> getActivationLinkStatus() {
-        //log.info("Verify user activation link status for link : {}", link);
+        log.info("Verify service");
         return new ResponseEntity<>("Hello world", HttpStatus.OK);
     }
 
 
-    @GetMapping()
-    public ResponseEntity<SplitMovie> getSplitMovieInFiles(@RequestParam("pathFileName") String pathName) {
+    @PostMapping()
+    public ResponseEntity<SplitMovie> splitMovieInChunk(@RequestParam("pathFileName") String pathName) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
@@ -52,9 +53,9 @@ public class SplitMovieController {
         splitMovieService.saveChuncksInFile(movieSplited,pathName);
 
         //storage metadata in DataBaseMovie
-        JSONObject body = getDataBaseBodyRequestJSON(movieSplited);
-        HttpEntity<String> request = new HttpEntity<>(body.toString(), headers);
-        restTemplate.postForEntity("http://localhost:8086/movie", request, String.class);
+//        JSONObject body = getDataBaseBodyRequestJSON(movieSplited);
+//        HttpEntity<String> request = new HttpEntity<>(body.toString(), headers);
+//        restTemplate.postForEntity("http://localhost:8086/movie", request, String.class);
 
         //storage chuncks in MongoDataBaseMovie
         JSONObject bodyMongo = getMongoBodyRequestJSON(movieSplited);
@@ -80,7 +81,6 @@ public class SplitMovieController {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
         return bodyMongo;
     }
 

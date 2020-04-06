@@ -4,7 +4,7 @@ import io.javabrains.moviesplitMovieservice.exception.InvalidPathException;
 import io.javabrains.moviesplitMovieservice.models.Chunck;
 import io.javabrains.moviesplitMovieservice.models.SplitMovie;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tomcat.util.codec.binary.Base64;
+import java.util.Base64;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
@@ -19,7 +19,7 @@ public class SplitMovieService {
     public SplitMovie splitMovie(String pathName) {
         SplitMovie splitMovie = new SplitMovie();
         //---how find good size for chunck files---------------------------------------------
-        splitMovie.setChunckSize((long) 1024 * 1024 * 5);
+        splitMovie.setChunckSize((long) 1024 * 1024 * 1/2);
         splitMovie.setNumberOfFiles(0);
         splitMovie.setTotalSizeFile((long) 0);
 
@@ -34,7 +34,7 @@ public class SplitMovieService {
             if (file != null) {
                 BufferedInputStream bufferedInputStream = convertFileIntoBufferedInputStream(file);
                 while ((bytesAmount = bufferedInputStream.read(buffer, 0, splitMovie.getChunckSize().intValue())) > 0) {
-                    String base64Buffer = Base64.encodeBase64String(buffer);
+                    String base64Buffer = Base64.getEncoder().encodeToString(buffer);
                     Chunck chunck = new Chunck(splitMovie.getVideoId(), base64Buffer);
                     listOfChuncks.add(chunck);
                     splitMovie.incrementNumberOfFiles();
@@ -71,7 +71,7 @@ public class SplitMovieService {
         ListIterator<Chunck> chunckListIterator=splitMovie.getListOfChunks().listIterator();
         while(chunckListIterator.hasNext()) {
             Chunck chunck=chunckListIterator.next();
-            String base64Buffer = Base64.encodeBase64String(chunck.getVideoChunck().getBytes());
+            String base64Buffer = Base64.getEncoder().encodeToString(chunck.getVideoChunck().getBytes());
             chunck.setVideoChunck(base64Buffer);
             chunckListIterator.set(chunck);
         }

@@ -23,10 +23,13 @@ public class PersistanceMongoService {
         return chuncks;
     }
 
-    public ListChunckDTO getChuncks(String id) {
-        ListChunckDTO listChunckDTO = new ListChunckDTO();
-        listChunckDTO.setListOfChuncks(chunckRepositoryMongo.findByVideoId(id));
-        return listChunckDTO;
+    public Chunck getChuncks(String id) {
+       // ListChunckDTO listChunckDTO = new ListChunckDTO();
+       // listChunckDTO.setListOfChuncks(chunckRepositoryMongo.findByVideoId(id));
+       // return listChunckDTO;
+        Chunck chunck=new Chunck();
+        chunck=(chunckRepositoryMongo.findById(id).get());
+        return chunck;
     }
 }
 

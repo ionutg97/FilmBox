@@ -1,33 +1,71 @@
 version: '2.1'
 
 services:
-  springboot-docker-compose-app-container:
-    image: discovery-server:1
+  discovery-server:
+    image: discovery-server
     build:
       context: ./
       dockerfile: Dockerfile
     ports:
       - "8761:8761"
 
-  postgres:
-    image: postgres
-    network_mode: bridge
-    container_name: postgres_container
-    volumes:
-      - ../movie-commentary-service/src/main/resources/sql/dataStorage:/var/lib/postgresql/data
-    ports:
-      - 5432:5432
+  mongodb:
+    image: mongo:latest
     environment:
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_DB=comments
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: rootpassword
+    ports:
+      - 27017:27017
+    volumes:
+      - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+      - ./mongo-volume:/data/db
 
-  movie-commentary-service:
-    image: movie-commentary-service
+
+  mongodb-service:
+    image: mongodatabase-service
     build:
-      context: ../movie-commentary-service
+      context: ../mongoDataBaseMovie-service
       dockerfile: Dockerfile
     ports:
       - "8087:8087"
+    links:
+      - discovery-server
     depends_on:
-      - postgres
+      - mongodb
+      - discovery-server
+
+
+  splitMovie:
+    image: splitmovie-service
+    build:
+      context: ../movie-splitMovie-service
+      dockerfile: Dockerfile
+    ports:
+      - "8084:8084"
+    links:
+      - discovery-server
+    depends_on:
+      - discovery-server
+
+#  postgres:
+#    image: postgres
+#    network_mode: bridge
+#    container_name: postgres_container
+#    volumes:
+#      - ../movie-commentary-service/src/main/resources/sql/dataStorage:/var/lib/postgresql/data
+#    ports:
+#      - 5432:5432
+#    environment:
+#      - POSTGRES_PASSWORD=postgres
+#      - POSTGRES_USER=postgres
+#      - POSTGRES_DB=comments
+
+#  movie-commentary-service:
+#    image: movie-commentary-service
+#    build:
+#      context: ../movie-commentary-service
+#      dockerfile: Dockerfile
+#    ports:
+#      - "8087:8087"
+#    depends_on:
+#      - postgres
