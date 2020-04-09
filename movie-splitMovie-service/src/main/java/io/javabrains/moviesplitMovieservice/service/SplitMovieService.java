@@ -19,7 +19,7 @@ public class SplitMovieService {
     public SplitMovie splitMovie(String pathName) {
         SplitMovie splitMovie = new SplitMovie();
         //---how find good size for chunck files---------------------------------------------
-        splitMovie.setChunckSize((long) 1024 * 1024 * 1/2);
+        splitMovie.setChunckSize((long) 1024 * 1024 * 5);
         splitMovie.setNumberOfFiles(0);
         splitMovie.setTotalSizeFile((long) 0);
 
@@ -35,7 +35,7 @@ public class SplitMovieService {
                 BufferedInputStream bufferedInputStream = convertFileIntoBufferedInputStream(file);
                 while ((bytesAmount = bufferedInputStream.read(buffer, 0, splitMovie.getChunckSize().intValue())) > 0) {
                     String base64Buffer = Base64.getEncoder().encodeToString(buffer);
-                    Chunck chunck = new Chunck(splitMovie.getVideoId(), base64Buffer);
+                    Chunck chunck = new Chunck(null,splitMovie.getVideoId(), base64Buffer);
                     listOfChuncks.add(chunck);
                     splitMovie.incrementNumberOfFiles();
                 }

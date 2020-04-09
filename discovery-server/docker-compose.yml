@@ -11,14 +11,16 @@ services:
 
   mongodb:
     image: mongo:latest
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: rootpassword
+    #environment:
+      #MONGO_INITDB_DATABASE: movie
+      #MONGO_INITDB_ROOT_USERNAME: root
+      #MONGO_INITDB_ROOT_PASSWORD: rootpassword
     ports:
       - 27017:27017
     volumes:
       - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
       - ./mongo-volume:/data/db
+    #command: mongod --auth
 
 
   mongodb-service:
@@ -44,6 +46,8 @@ services:
       - "8084:8084"
     links:
       - discovery-server
+    volumes:
+      - ../discovery-server/videos:/home/user/videos
     depends_on:
       - discovery-server
 

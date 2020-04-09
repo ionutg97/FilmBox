@@ -1,7 +1,6 @@
 package io.javabrains.mongoDataBaseMovieservice.controller;
 
 import io.javabrains.mongoDataBaseMovieservice.dto.ListChunckDTO;
-import io.javabrains.mongoDataBaseMovieservice.models.Chunck;
 import io.javabrains.mongoDataBaseMovieservice.service.PersistanceMongoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import org.apache.tomcat.util.codec.binary.Base64;
 
 import javax.servlet.http.HttpServletResponse;
-import java.nio.file.Files;
 
 @RestController
 @RequestMapping("/mongo")

@@ -1,0 +1,8 @@
+cd C:\Users\ionut\OneDrive\Documents\Licenta\Backend\Repository\FilmBox\discovery-server\
+docker build -f Dockerfile -t discover-server .
+
+cd C:\Users\ionut\OneDrive\Documents\Licenta\Backend\Repository\FilmBox\mongoDataBaseMovie-service\
+docker build -f Dockerfile -t mongodatabase-service .
+
+cd C:\Users\ionut\OneDrive\Documents\Licenta\Backend\Repository\FilmBox\movie-splitMovie-service\
+docker build -f Dockerfile -t splitmovie-service .

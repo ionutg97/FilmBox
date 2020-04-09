@@ -4,7 +4,6 @@ import lombok.*;
 
 @EqualsAndHashCode
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
 @Data
 public class Chunck {
@@ -13,7 +12,8 @@ public class Chunck {
     private String videoId;
     private String videoChunck;
 
-    public Chunck(String videoId, String videoChunck) {
+    public Chunck(String id,String videoId, String videoChunck) {
+        this.id=id;
         this.videoId = videoId;
         this.videoChunck = videoChunck;
     }

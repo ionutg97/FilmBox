@@ -18,7 +18,9 @@ public class PersistanceMongoService {
         ListIterator<Chunck> chuncksListIterator = chuncks.getListOfChuncks().listIterator();
         while (chuncksListIterator.hasNext()) {
             Chunck itemSaved = chunckRepositoryMongo.save(chuncksListIterator.next());
+            itemSaved.setId(itemSaved.get_id());
             chuncksListIterator.set(itemSaved);
+
         }
         return chuncks;
     }
