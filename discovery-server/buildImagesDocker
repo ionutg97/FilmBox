@@ -6,3 +6,10 @@ docker build -f Dockerfile -t mongodatabase-service .
 
 cd C:\Users\ionut\OneDrive\Documents\Licenta\Backend\Repository\FilmBox\movie-splitMovie-service\
 docker build -f Dockerfile -t splitmovie-service .
+
+cd C:\Users\ionut\OneDrive\Documents\Licenta\Backend\Repository\FilmBox\movie-dataBase\
+docker build -f Dockerfile -t data-base-movie-service .
+
+cd C:\Users\ionut\OneDrive\Documents\Licenta\Backend\Repository\FilmBox\movie-commentary-service\
+docker build -f Dockerfile -t movie-commentary-service .
+
