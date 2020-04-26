@@ -32,4 +32,10 @@ public class UserService {
     {
         return userRepository.findAllUsersByType(type);
     }
+
+    public User getUserByName(String name)
+    {
+        return userRepository.findByName(name)
+                .orElseThrow(() -> new ResourceNotFoundException(User.class.getSimpleName()));
+    }
 }
