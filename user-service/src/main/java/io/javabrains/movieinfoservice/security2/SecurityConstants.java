@@ -20,7 +20,7 @@ public class SecurityConstants {
             "/api/activation*",
             "/api/users/resetPassword/*",
             "/api/users/request_password_reset",
-            "/api/users/verify/is_password_reset/*"
+            "/api/users/verify/is_password_reset/*",
     };
 
     public static List<String> getNonauthorizedPaths() {

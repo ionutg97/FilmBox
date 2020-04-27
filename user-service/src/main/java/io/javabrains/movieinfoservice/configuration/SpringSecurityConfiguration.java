@@ -17,8 +17,14 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.password.StandardPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 @Configuration
@@ -47,6 +53,10 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(4);
+//        Map<String, PasswordEncoder> encoders = new HashMap();
+//        encoders.put("sha256", new StandardPasswordEncoder());
+//        return new DelegatingPasswordEncoder("sha256",encoders);
+//        //return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
     @Override
@@ -78,6 +88,7 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
     private DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
         authenticationProvider.setUserDetailsService(userDetailsService);
+        //authenticationProvider.setPasswordEncoder(passwordEncoder());
         authenticationProvider.setPasswordEncoder(new BCryptPasswordEncoder());
         return authenticationProvider;
     }

@@ -17,7 +17,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Service;
@@ -39,6 +39,9 @@ public class AuthenticationFilter extends AbstractAuthenticationProcessingFilter
     String HEADER = "Authorization";
 
     private UserService userService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     @Lazy
@@ -90,8 +93,6 @@ public class AuthenticationFilter extends AbstractAuthenticationProcessingFilter
         User user = getUserFromUsersCredentials(userCredentials);
 
         Authentication authentication = null;
-
-        String encodedPassword = new BCryptPasswordEncoder().encode("jhon");
 
         try {
             authentication = getAuthenticationManager().authenticate(
