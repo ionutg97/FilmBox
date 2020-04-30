@@ -8,5 +8,5 @@ import lombok.*;
 @NoArgsConstructor
 @Data
 public class Movie {
-    Long id;
+    String id;
 }

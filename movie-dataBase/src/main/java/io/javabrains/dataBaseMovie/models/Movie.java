@@ -21,4 +21,6 @@ public class Movie {
     private Long idBlobStorage;
 
     private String videoId;
+
+    private Long idUser;
 }
