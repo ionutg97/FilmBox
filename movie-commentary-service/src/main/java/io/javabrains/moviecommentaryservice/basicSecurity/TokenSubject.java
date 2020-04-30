@@ -1,4 +1,4 @@
-package io.javabrains.moviecommentaryservice.security;
+package io.javabrains.moviecommentaryservice.basicSecurity;
 
 
 import lombok.Builder;
