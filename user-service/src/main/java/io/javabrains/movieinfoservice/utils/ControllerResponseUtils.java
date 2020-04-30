@@ -6,6 +6,7 @@ import java.util.Objects;
 
 public class ControllerResponseUtils {
     private static HttpHeaders responseHeaders;
+    private static HttpHeaders requestHeaders;
 
     public static HttpHeaders getResponseHeaders() {
         if (Objects.isNull(responseHeaders)) {
@@ -14,4 +15,5 @@ public class ControllerResponseUtils {
         }
         return responseHeaders;
     }
+
 }

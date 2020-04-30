@@ -16,11 +16,8 @@ public class SecurityConstants {
 
 
     private static String[] nonauthorizedPaths = new String[]{
-            "/api/activation/**",
-            "/api/activation*",
-            "/api/users/resetPassword/*",
-            "/api/users/request_password_reset",
-            "/api/users/verify/is_password_reset/*",
+            //"/user/new_user",
+            "another/path"
     };
 
     public static List<String> getNonauthorizedPaths() {

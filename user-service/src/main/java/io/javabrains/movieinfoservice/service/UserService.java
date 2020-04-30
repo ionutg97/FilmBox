@@ -22,7 +22,7 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public User getUserById(Integer id)
+    public User getUserById(Long id)
     {
         return userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(User.class.getSimpleName()));
@@ -37,5 +37,12 @@ public class UserService {
     {
         return userRepository.findByName(name)
                 .orElseThrow(() -> new ResourceNotFoundException(User.class.getSimpleName()));
+    }
+
+    public void deleteUser(Long id)
+    {
+        User user=userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(User.class.getSimpleName()));
+        userRepository.delete(user);
     }
 }

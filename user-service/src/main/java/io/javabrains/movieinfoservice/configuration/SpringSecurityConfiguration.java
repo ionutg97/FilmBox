@@ -72,6 +72,8 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/api/login").permitAll()
 
+                .antMatchers(HttpMethod.DELETE, "/user/delete/*").hasAnyAuthority("admin")
+
                 .and()
                 .addFilterBefore(authenticationFilter,
                         UsernamePasswordAuthenticationFilter.class)
