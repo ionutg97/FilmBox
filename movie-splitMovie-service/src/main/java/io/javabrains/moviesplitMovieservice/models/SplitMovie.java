@@ -24,6 +24,7 @@ public class SplitMovie {
 
     private List<Chunck> listOfChunks;
 
+    private Long idUser;
 
     public void incrementNumberOfFiles() {
         numberOfFiles++;

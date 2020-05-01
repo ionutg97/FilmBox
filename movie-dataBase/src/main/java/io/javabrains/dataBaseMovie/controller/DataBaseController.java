@@ -40,16 +40,16 @@ public class DataBaseController {
 
         TokenSubject tokenSubject = Utils.validateRequestUsingJWT(token);
         log.info("Data base movie service save new Movie metadata in SQL data base!");
-        Movie movieSaved = dataBaseServices.saveMovie(movie);
-        if (tokenSubject != null && activeProfile.equals("dev")) {
 
+        if (tokenSubject != null && activeProfile.equals("dev")) {
+            Movie movieSaved = dataBaseServices.saveMovie(movie);
             restTemplate.postForEntity("http://movie-commentary-service:8087/movie/replication",
                     ControllerRequestUtils.createRequest(new MovieReplication(movieSaved.getVideoId())),
                     MovieReplication.class);
 
             return new ResponseEntity(movieSaved, HttpStatus.OK);
         } else if (tokenSubject != null && activeProfile.equals("default")) {
-
+            Movie movieSaved = dataBaseServices.saveMovie(movie);
             restTemplate.postForEntity("http://localhost:8087/movie/replication",
                     ControllerRequestUtils.createRequest(new MovieReplication(movieSaved.getVideoId())),
                     MovieReplication.class);
