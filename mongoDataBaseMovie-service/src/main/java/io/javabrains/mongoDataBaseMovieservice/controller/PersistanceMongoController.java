@@ -3,6 +3,7 @@ package io.javabrains.mongoDataBaseMovieservice.controller;
 import io.javabrains.mongoDataBaseMovieservice.basicSecurity.TokenSubject;
 import io.javabrains.mongoDataBaseMovieservice.basicSecurity.Utils;
 import io.javabrains.mongoDataBaseMovieservice.dto.ListChunckDTO;
+import io.javabrains.mongoDataBaseMovieservice.dto.MovieIdChunckDTO;
 import io.javabrains.mongoDataBaseMovieservice.service.PersistanceMongoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,10 +11,12 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.apache.tomcat.util.codec.binary.Base64;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -61,6 +64,22 @@ public class PersistanceMongoController {
         else
         {
             return new ResponseEntity<byte[]>(HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    @GetMapping()
+    public ResponseEntity<List<String>> getListId(@RequestParam String video,
+                                                  @RequestHeader("Authorization") String token){
+
+        TokenSubject tokenSubject = Utils.validateRequestUsingJWT(token);
+
+        if (tokenSubject != null) {
+            List<String> listIdChunckDTO = persistanceMongoService.getListOfId(video);
+            return new ResponseEntity<List<String>>(listIdChunckDTO, HttpStatus.OK);
+        }
+        else
+        {
+            return new ResponseEntity<List<String>>(HttpStatus.UNAUTHORIZED);
         }
     }
 }

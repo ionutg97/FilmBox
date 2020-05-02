@@ -1,12 +1,17 @@
 package io.javabrains.mongoDataBaseMovieservice.service;
 
 import io.javabrains.mongoDataBaseMovieservice.dto.ListChunckDTO;
+import io.javabrains.mongoDataBaseMovieservice.dto.MovieIdChunckDTO;
+import io.javabrains.mongoDataBaseMovieservice.exception.ResourceNotFoundException;
 import io.javabrains.mongoDataBaseMovieservice.models.Chunck;
 import io.javabrains.mongoDataBaseMovieservice.persistance.ChunckRepositoryMongo;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.ListIterator;
+import java.util.stream.Collectors;
 
 @Service
 public class PersistanceMongoService {
@@ -32,6 +37,16 @@ public class PersistanceMongoService {
         Chunck chunck=new Chunck();
         chunck=(chunckRepositoryMongo.findById(id).get());
         return chunck;
+    }
+
+    public List<String> getListOfId(String videoId)
+    {
+        List<MovieIdChunckDTO> result= chunckRepositoryMongo.findByVideoId(videoId)
+                .orElseThrow(() -> new ResourceNotFoundException(MovieIdChunckDTO.class.getSimpleName()));;
+
+         return result.stream()
+                 .map(x->x.getId())
+                 .collect(Collectors.toList());
     }
 }
 
