@@ -22,4 +22,13 @@ public class MovieQueries {
             ":id_user" +
             " )";
 
+    public static final String GET_ALL_MOVIE = "SELECT " +
+            "id, " +
+            "file_name, " +
+            "number_chunks, " +
+            "total_size, " +
+            "video_id," +
+            "id_user " +
+            "FROM movies";
+
 }

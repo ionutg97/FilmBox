@@ -1,6 +1,8 @@
 package io.javabrains.dataBaseMovie.repository;
 
+import io.javabrains.dataBaseMovie.dto.MovieDTO;
 import io.javabrains.dataBaseMovie.models.Movie;
+import io.javabrains.dataBaseMovie.repository.mapper.MovieDTORowMapper;
 import io.javabrains.dataBaseMovie.repository.queries.MovieQueries;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +36,7 @@ public class DataBaseRepository {
     void init() {
         keyHolder=new GeneratedKeyHolder();
     }
+
     public Movie save(Movie movie) {
 
         SqlParameterSource parameters = new MapSqlParameterSource()
@@ -54,5 +57,12 @@ public class DataBaseRepository {
         return movie;
 
     }
+
+    public List<MovieDTO> findAll(){
+        log.info("Retrieving all movies!");
+        List<MovieDTO> movies = jdbcTemplate.query(MovieQueries.GET_ALL_MOVIE, new MovieDTORowMapper());
+        return movies;
+    }
+
 }
 

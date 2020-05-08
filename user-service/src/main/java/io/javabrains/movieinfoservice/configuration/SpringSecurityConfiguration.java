@@ -90,7 +90,6 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
     private DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
         authenticationProvider.setUserDetailsService(userDetailsService);
-        //authenticationProvider.setPasswordEncoder(passwordEncoder());
         authenticationProvider.setPasswordEncoder(new BCryptPasswordEncoder());
         return authenticationProvider;
     }

@@ -2,6 +2,7 @@ package io.javabrains.dataBaseMovie.controller;
 
 import io.javabrains.dataBaseMovie.basicSecurity.TokenSubject;
 import io.javabrains.dataBaseMovie.basicSecurity.Utils;
+import io.javabrains.dataBaseMovie.dto.MovieDTO;
 import io.javabrains.dataBaseMovie.models.Movie;
 import io.javabrains.dataBaseMovie.models.replication.MovieReplication;
 import io.javabrains.dataBaseMovie.service.DataBaseServices;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -39,7 +41,7 @@ public class DataBaseController {
     public ResponseEntity<Movie> saveMovie(@RequestBody Movie movie, @RequestHeader("Authorization") String token) {
 
         TokenSubject tokenSubject = Utils.validateRequestUsingJWT(token);
-        log.info("Data base movie service save new Movie metadata in SQL data base!");
+        log.info("Data base movie controller save new Movie metadata in SQL data base!");
 
         if (tokenSubject != null && activeProfile.equals("dev")) {
             Movie movieSaved = dataBaseServices.saveMovie(movie);
@@ -59,4 +61,14 @@ public class DataBaseController {
             return new ResponseEntity<Movie>(HttpStatus.UNAUTHORIZED);
     }
 
+    @GetMapping
+    public ResponseEntity<List<MovieDTO>> getAllMovie(@RequestHeader("Authorization") String token) {
+        TokenSubject tokenSubject = Utils.validateRequestUsingJWT(token);
+        log.info("Data base movie controller get all Movies metadata from SQL data base!");
+
+        if (tokenSubject != null) {
+            return new ResponseEntity<List<MovieDTO>>(dataBaseServices.findAllMovie(), HttpStatus.OK);
+        }
+        return new ResponseEntity<List<MovieDTO>>(HttpStatus.UNAUTHORIZED);
+    }
 }
