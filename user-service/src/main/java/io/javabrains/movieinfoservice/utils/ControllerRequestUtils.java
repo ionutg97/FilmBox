@@ -20,7 +20,7 @@ public class ControllerRequestUtils {
 
     public static JSONObject createJSON(UserReplication userReplication) {
         JSONObject jsonObject = new JSONObject();
-        try{
+        try {
             jsonObject.put("id", userReplication.getId());
         } catch (JSONException e) {
             e.printStackTrace();

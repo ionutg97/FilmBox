@@ -9,7 +9,8 @@ import io.javabrains.movieinfoservice.utils.ControllerResponseUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
@@ -61,23 +62,20 @@ public class UserController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity delete(@PathVariable Long id)
-    {
+    public ResponseEntity delete(@PathVariable Long id) {
         try {
             userService.deleteUser(id);
-            log.info("User with id= {} was deleted",id);
+            log.info("User with id= {} was deleted", id);
 
             if (activeProfile.equals("dev")) {
-                restTemplate.delete("http://movie-commentary-service:8087/user/replication/"+id );
+                restTemplate.delete("http://movie-commentary-service:8087/user/replication/" + id);
                 return new ResponseEntity(HttpStatus.OK);
             } else {
-                restTemplate.delete("http://localhost:8087/user/replication/"+id );
+                restTemplate.delete("http://localhost:8087/user/replication/" + id);
                 return new ResponseEntity(HttpStatus.OK);
             }
-        }
-        catch (ResourceNotFoundException exception)
-        {
-            log.error("User with id= {} could not found!",id);
+        } catch (ResourceNotFoundException exception) {
+            log.error("User with id= {} could not found!", id);
             return new ResponseEntity(HttpStatus.NO_CONTENT);
         }
     }

@@ -12,22 +12,22 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Getter
 @Entity
-@Table(name="user")
+@Table(name = "user")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-   @Column(name = "name", unique=true, length = 128)
+    @Column(name = "name", unique = true, length = 128)
     private String name;
 
-    @Column(name = "email", unique=true , length = 128  )
+    @Column(name = "email", unique = true, length = 128)
     private String email;
 
-    @Column(nullable=false)
+    @Column(nullable = false)
     private String password;
 
-    @Column(nullable=false)
+    @Column(nullable = false)
     private String role;
 
 
