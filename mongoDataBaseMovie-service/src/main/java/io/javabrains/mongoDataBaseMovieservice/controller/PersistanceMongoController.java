@@ -42,6 +42,13 @@ public class PersistanceMongoController {
         }
     }
 
+    /***
+     * Get content for chunck.
+     * @param id
+     * @param response
+     * @param token
+     * @return
+     */
     @CrossOrigin
     @GetMapping("/video")
     public ResponseEntity<byte[]> getChuncks(@RequestParam(name="video") String id,
@@ -67,6 +74,12 @@ public class PersistanceMongoController {
         }
     }
 
+    /***
+     *  Get all id for chuncks generated.
+     * @param video String which contain unique id for on video, which  is stored in data base.
+     * @param token Token which verify if user is authenticated.
+     * @return
+     */
     @GetMapping()
     public ResponseEntity<List<String>> getListId(@RequestParam String video,
                                                   @RequestHeader("Authorization") String token){

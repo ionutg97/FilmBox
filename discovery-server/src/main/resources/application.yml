@@ -10,3 +10,9 @@ eureka:
     serviceUrl:
       #defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
       defaultZone: http://localhost:${server.port}/eureka/
+
+logging:
+  level:
+    org.springframework.web: ERROR
+    org.hibernate: ERROR
+  file: discoverService.log

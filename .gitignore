@@ -18,7 +18,11 @@ Feedback-App/.gitignore
  igalan Backend Project
 5ce68b7 on Sep 12
 114 lines (90 sloc)  1.92 KB
-  
+#my ignore file
+*.webm
+*.webm.*
+*.log.*
+
 # User-specific stuff
 .idea
 .idea/**/workspace.xml

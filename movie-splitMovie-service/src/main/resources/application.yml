@@ -6,6 +6,12 @@ spring:
 server:
   port: 8084
 
+logging:
+  level:
+    org.springframework.web: ERROR
+    org.hibernate: ERROR
+  file: splitMovieService.log
+
 eureka:
   instance:
     prefer-ip-address: true
