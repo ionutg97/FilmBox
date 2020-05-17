@@ -52,6 +52,12 @@
             <scope>provided</scope>
         </dependency>
 
+		<!-- https://mvnrepository.com/artifact/org.springframework/spring-webflux
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webflux</artifactId>
+		</dependency>-->
+
 		<!-- Json -->
 		<dependency>
 			<groupId>com.vaadin.external.google</groupId>
