@@ -11,6 +11,8 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.zip.GZIPOutputStream;
+
 
 @Slf4j
 @Service
@@ -66,16 +68,17 @@ public class SplitMovieService {
         }
     }
 
-    public SplitMovie compressBase64(SplitMovie splitMovie)
-    {
-        ListIterator<Chunck> chunckListIterator=splitMovie.getListOfChunks().listIterator();
-        while(chunckListIterator.hasNext()) {
-            Chunck chunck=chunckListIterator.next();
-            String base64Buffer = Base64.getEncoder().encodeToString(chunck.getVideoChunck().getBytes());
-            chunck.setVideoChunck(base64Buffer);
-            chunckListIterator.set(chunck);
+    private byte[] gzipCompress(byte[] uncompressedData) {
+        byte[] result = new byte[]{};
+        try (ByteArrayOutputStream bos = new ByteArrayOutputStream(uncompressedData.length);
+             GZIPOutputStream gzipOS = new GZIPOutputStream(bos)) {
+            gzipOS.write(uncompressedData);
+            gzipOS.close();
+            result = bos.toByteArray();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        return splitMovie;
+        return result;
     }
 
     private File createFileIfPathNameIsValid(String pathNameFile) {

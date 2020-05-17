@@ -16,7 +16,11 @@ import org.springframework.web.bind.annotation.*;
 import org.apache.tomcat.util.codec.binary.Base64;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.List;
+import java.util.zip.GZIPInputStream;
 
 @Slf4j
 @RestController
@@ -59,7 +63,6 @@ public class PersistanceMongoController {
 
         if (tokenSubject != null) {
             byte[] video = Base64.decodeBase64(persistanceMongoService.getChuncks(id).getVideoChunck());
-
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
             headers.setContentLength(video.length);
@@ -94,5 +97,22 @@ public class PersistanceMongoController {
         {
             return new ResponseEntity<List<String>>(HttpStatus.UNAUTHORIZED);
         }
+    }
+
+    private byte[] gzipUncompress(byte[] compressedData) {
+        byte[] result = new byte[]{};
+        try (ByteArrayInputStream bis = new ByteArrayInputStream(compressedData);
+             ByteArrayOutputStream bos = new ByteArrayOutputStream();
+             GZIPInputStream gzipIS = new GZIPInputStream(bis)) {
+            byte[] buffer = new byte[1024];
+            int len;
+            while ((len = gzipIS.read(buffer)) != -1) {
+                bos.write(buffer, 0, len);
+            }
+            result = bos.toByteArray();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 }
