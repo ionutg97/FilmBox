@@ -37,6 +37,7 @@ public class SplitMovieService {
                 BufferedInputStream bufferedInputStream = convertFileIntoBufferedInputStream(file);
                 while ((bytesAmount = bufferedInputStream.read(buffer, 0, splitMovie.getChunckSize().intValue())) > 0) {
                     String base64Buffer = Base64.getEncoder().encodeToString(buffer);
+                    splitMovie.setTotalSizeFile(splitMovie.getTotalSizeFile()+base64Buffer.length());
                     Chunck chunck = new Chunck(null,splitMovie.getVideoId(), base64Buffer);
                     listOfChuncks.add(chunck);
                     splitMovie.incrementNumberOfFiles();
