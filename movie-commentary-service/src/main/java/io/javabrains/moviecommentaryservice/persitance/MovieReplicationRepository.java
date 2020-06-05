@@ -29,7 +29,7 @@ public class MovieReplicationRepository {
         return movie;
     }
 
-    public int deleteMovieReplication(Long id) {
+    public int deleteMovieReplication(String id) {
         SqlParameterSource parameters = new MapSqlParameterSource()
                 .addValue("id", id);
         int result = namedParameterJdbcTemplate.update(MovieReplicationQueries.DELETE_MOVIE, parameters);

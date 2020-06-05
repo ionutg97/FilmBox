@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/comment")
 public class CommentController {
@@ -28,7 +30,7 @@ public class CommentController {
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity delete(@PathVariable Long id, @RequestHeader("Authorization") String token ) {
+    public ResponseEntity delete(@PathVariable String id, @RequestHeader("Authorization") String token ) {
         TokenSubject tokenSubject=Utils.validateRequestUsingJWT(token);
 
         if(tokenSubject!=null) {
@@ -41,5 +43,28 @@ public class CommentController {
             return new ResponseEntity<Comment>(HttpStatus.UNAUTHORIZED);
     }
 
+    @GetMapping(value= "/{id}")
+    public ResponseEntity<List<Comment>> getAllCommentaryForMovie(@PathVariable String id, @RequestHeader("Authorization") String token ){
+        TokenSubject tokenSubject=Utils.validateRequestUsingJWT(token);
+
+        if(tokenSubject!=null) {
+            List result =commentService.getAllCommentForMovie(id);
+            return new ResponseEntity<List<Comment>>(result,HttpStatus.OK);
+        }
+        else
+            return new ResponseEntity<List<Comment>>(HttpStatus.UNAUTHORIZED);
+    }
+
+    @GetMapping(value= "/number/{id}")
+    public ResponseEntity<Integer> getNumberOfComm(@PathVariable String id, @RequestHeader("Authorization") String token ){
+        TokenSubject tokenSubject=Utils.validateRequestUsingJWT(token);
+
+        if(tokenSubject!=null) {
+            Integer result=commentService.getNumberOfComm(id);
+            return new ResponseEntity<Integer>(result,HttpStatus.OK);
+        }
+        else
+            return new ResponseEntity<Integer>(HttpStatus.UNAUTHORIZED);
+    }
 
 }

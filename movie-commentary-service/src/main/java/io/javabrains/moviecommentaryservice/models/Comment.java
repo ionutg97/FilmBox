@@ -6,10 +6,11 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
 @Data
 public class Comment {
     Long id;
     String content;
     Long idUser;
-    Long idMovie;
+    String idMovie;
 }

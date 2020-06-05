@@ -20,9 +20,8 @@ public class MovieReplicationController {
         return new ResponseEntity<Movie>(movieReplicationService.saveMovieReplication(movie), HttpStatus.CREATED);
     }
 
-
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity deleteMovieReplication(@PathVariable Long id) {
+    public ResponseEntity deleteMovieReplication(@PathVariable String id) {
         if (movieReplicationService.deleteMovieReplication(id) >= 1)
             return new ResponseEntity(HttpStatus.OK);
         else

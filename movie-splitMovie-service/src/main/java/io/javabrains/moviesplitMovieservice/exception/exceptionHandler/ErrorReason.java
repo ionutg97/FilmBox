@@ -4,7 +4,7 @@ import org.springframework.http.HttpStatus;
 
 public enum ErrorReason {
 
-    PATH_FILE_INVALID(HttpStatus.BAD_REQUEST),
+    PATH_FILE_INVALID(HttpStatus.INTERNAL_SERVER_ERROR),
     TECHNICAL_ERROR(HttpStatus.INTERNAL_SERVER_ERROR);
 
     private HttpStatus httpStatus;

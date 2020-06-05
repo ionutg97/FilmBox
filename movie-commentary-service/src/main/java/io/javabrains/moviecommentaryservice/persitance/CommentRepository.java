@@ -3,6 +3,7 @@ package io.javabrains.moviecommentaryservice.persitance;
 import io.javabrains.moviecommentaryservice.models.Comment;
 import io.javabrains.moviecommentaryservice.models.Movie;
 import io.javabrains.moviecommentaryservice.models.User;
+import io.javabrains.moviecommentaryservice.persitance.mapper.CommentRowMapper;
 import io.javabrains.moviecommentaryservice.persitance.queries.CommentQueries;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +53,7 @@ public class CommentRepository {
         return comment;
     }
 
-    public int delete(Long id) {
+    public int delete(String id) {
         SqlParameterSource parameters = new MapSqlParameterSource()
                 .addValue("id", id);
 
@@ -60,14 +61,23 @@ public class CommentRepository {
         return result;
     }
 
-    public User saveUser(User user) {
+    public List<Comment> findAllCommentForMovie(String id){
+        log.info("Retrieving all commentary for one movie!");
+        MapSqlParameterSource parameter= new MapSqlParameterSource()
+                .addValue("id", id);
+        List<Comment> listComment;
+        listComment = namedParameterJdbcTemplate
+                .query(CommentQueries.GET_COMMENT_FOR_MOVIE,parameter, new CommentRowMapper());
 
-        return null;
+        return listComment;
     }
 
-    public Movie saveVideo(Movie video) {
-
-        return null;
+    public Integer findNewComment(String id){
+        log.info("Retrieving the number of commentary for one movie!");
+        MapSqlParameterSource parameter= new MapSqlParameterSource()
+                .addValue("id", id);
+        Integer result = namedParameterJdbcTemplate.queryForObject(CommentQueries.COUNT_NUMBER_OF_COMM_FOR_MOVIE,parameter, Integer.class );
+        return result;
     }
 
 }

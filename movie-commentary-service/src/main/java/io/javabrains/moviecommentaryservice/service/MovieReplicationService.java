@@ -16,7 +16,7 @@ public class MovieReplicationService {
         return movieReplicationRepository.saveMovieReplication(movie);
     }
 
-    public int deleteMovieReplication(Long id) {
+    public int deleteMovieReplication(String id) {
         return movieReplicationRepository.deleteMovieReplication(id);
     }
 }
