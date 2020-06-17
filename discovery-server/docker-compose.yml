@@ -7,79 +7,61 @@ services:
       context: ./
       dockerfile: Dockerfile
     ports:
-      - "8761:8761"
+      - 8761:8761
 
-#  mongodb:
-#    image: mongo:latest
-#    #environment:
-#      #MONGO_INITDB_DATABASE: movie
-#      #MONGO_INITDB_ROOT_USERNAME: root
-#      #MONGO_INITDB_ROOT_PASSWORD: rootpassword
-#    ports:
-#      - 27017:27017
-#    volumes:
-#      - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
-#      - ./mongo-volume:/data/db
-#    #command: mongod --auth
-#
-#
-#  mongodb-service:
-#    image: mongodatabase-service
-#    build:
-#      context: ../mongoDataBaseMovie-service
-#      dockerfile: Dockerfile
-#    ports:
-#      - "8087:8087"
-#    links:
-#      - discovery-server
-#    depends_on:
-#      - mongodb
-#      - discovery-server
-#
-#
-#  splitMovie-service:
-#    image: splitmovie-service
-#    build:
-#      context: ../movie-splitMovie-service
-#      dockerfile: Dockerfile
-#    ports:
-#      - "8084:8084"
-#    links:
-#      - discovery-server
-#    volumes:
-#      - ../discovery-server/videos:/home/user/videos
-#    depends_on:
-#      - discovery-server
-
-  postgres:
-    image: postgres
-    #network_mode: bridge
-    container_name: postgres_container
+  mongodb:
+    image: mongo:latest
+    environment:
+      MONGO_INITDB_DATABASE: movie
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: rootpassword
+    ports:
+      - 27017:27017
     volumes:
-      - pgdata:/var/lib/postgresql/data
-      #- ../movie-dataBase/src/main/resources/sql/dataStorage:/var/lib/postgresql/data
+      - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+      - mongo-volume:/data/db
+    command: mongod --auth
+
+
+  mongodb-service:
+    image: mongodatabase-service
+    build:
+      context: ../mongoDataBaseMovie-service
+      dockerfile: Dockerfile
+    ports:
+      - "8088:8088"
+    links:
+      - discovery-server
+    depends_on:
+      - mongodb
+      - discovery-server
+
+  splitMovie-service:
+    image: splitmovie-service
+    build:
+      context: ../movie-splitMovie-service
+      dockerfile: Dockerfile
+    ports:
+      - "8084:8084"
+    links:
+      - discovery-server
+    volumes:
+      - ../discovery-server/videos:/home/user/videos
+    depends_on:
+      - discovery-server
+
+  postgres-db:
+    image: postgres:10.3
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: comments
+      PGDATA: /tmp
     ports:
       - 5432:5432
-    environment:
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_DB=comments
-      - dbhost=localhost
-    networks:
-      - code-network
-
-
-#  dataBaseMovie-service:
-#    image: data-base-movie-service
-#    build:
-#      context: ../movie-dataBase
-#      dockerfile: Dockerfile
-#    ports:
-#      - "8086:8086"
-#    volumes:
-#      - /src/main/resources/sql/postgres:/home/user/sql/postgres
-#    depends_on:
-#      - postgres
+    volumes:
+      - ../movie-commentary-service/src/main/resources/sql/postgres:/var/lib/postgresql/data/flayway
+      - ./postgres/pgdata:/var/lib/postgresql/data
+      #- ../movie-dataBase/src/main/resources/sql/postgres-data:/var/lib/postgresql/data
 
   movie-commentary-service:
     image: movie-commentary-service
@@ -88,14 +70,39 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8087:8087"
+    environment:
+      DATABASE_HOST: postgres-db
+      DATABASE_PORT: 5432
+    command: ["./wait-for-it.sh", "postgres-db:5432"]
     volumes:
-      - /src/main/resources/sql/postgres:/home/user/sql/postgres/comments
+      - ../movie-commentary-service/src/main/resources/sql/postgres:/home/user/flyway
     depends_on:
-      - postgres
+      - discovery-server
+      - postgres-db
 
-networks:
-  code-network:
-    driver: bridge
+  mysql-db:
+    image: mysql
+    environment:
+        MYSQL_DATABASE: users
+        MYSQL_USER: root
+        MYSQL_PASSWORD: mysql
+    ports:
+      - '3307:3306'
+    volumes:
+      - my-db:/var/lib/mysql
+
+  user-service:
+    image: user-service
+    build:
+      context: ../user-service
+      dockerfile: Dockerfile
+    ports:
+      - "8091:8091"
+    depends_on:
+      - mysql-db
+      - discovery-server
+
 volumes:
-  pgdata:
+  my-db:
+  mongo-volume:
     external: true

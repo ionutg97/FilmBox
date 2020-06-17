@@ -16,7 +16,7 @@ public class SecurityConstants {
 
 
     private static String[] nonauthorizedPaths = new String[]{
-            //"/user/new_user",
+            "/user/new_user",
             "another/path"
     };
 

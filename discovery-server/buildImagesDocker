@@ -13,3 +13,5 @@ docker build -f Dockerfile -t data-base-movie-service .
 cd C:\Users\ionut\OneDrive\Documents\Licenta\Backend\Repository\FilmBox\movie-commentary-service\
 docker build -f Dockerfile -t movie-commentary-service .
 
+cd C:\Users\ionut\OneDrive\Documents\Licenta\Backend\Repository\FilmBox\user-service\
+docker build -f Dockerfile -t user-service .
