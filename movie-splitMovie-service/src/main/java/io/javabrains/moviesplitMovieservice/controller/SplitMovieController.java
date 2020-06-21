@@ -79,7 +79,7 @@ public class SplitMovieController {
             if (activeProfile.equals("dev")) {
 
                 //storage metadata in DataBaseMovie
-                restTemplate.postForEntity("http://dataBaseMovie-service:8086/movie", request, String.class);
+               // restTemplate.postForEntity("http://movieDataBase-service:8086/movie", request, String.class);
 
                 //storage chunck in MongoDataBase
                 ResponseEntity<ListOfChunckDTO> listOfChunck = restTemplate.postForEntity("http://mongodb-service:8088/mongo/save_chuncks",
@@ -89,7 +89,7 @@ public class SplitMovieController {
                 return new ResponseEntity<>(movieSplited, HttpStatus.OK);
             } else {
                 //storage metadata in DataBaseMovie
-                restTemplate.postForEntity("http://localhost:8086/movie", request, String.class);
+               // restTemplate.postForEntity("http://localhost:8086/movie", request, String.class);
 
                 //storage chunck in MongoDataBase
                 ResponseEntity<ListOfChunckDTO> listOfChunck = restTemplate.postForEntity("http://localhost:8088/mongo/save_chuncks",

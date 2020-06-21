@@ -1,4 +1,4 @@
-version: '2.1'
+version: '3.1'
 
 services:
   discovery-server:
@@ -7,7 +7,7 @@ services:
       context: ./
       dockerfile: Dockerfile
     ports:
-      - 8761:8761
+      - "8761:8761"
 
   mongodb:
     image: mongo:latest
@@ -16,12 +16,11 @@ services:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: rootpassword
     ports:
-      - 27017:27017
+      - "27017:27017"
     volumes:
       - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
       - mongo-volume:/data/db
     command: mongod --auth
-
 
   mongodb-service:
     image: mongodatabase-service
@@ -32,6 +31,7 @@ services:
       - "8088:8088"
     links:
       - discovery-server
+      - mongodb
     depends_on:
       - mongodb
       - discovery-server
@@ -50,59 +50,89 @@ services:
     depends_on:
       - discovery-server
 
-  postgres-db:
-    image: postgres:10.3
-    environment:
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: comments
-      PGDATA: /tmp
-    ports:
-      - 5432:5432
-    volumes:
-      - ../movie-commentary-service/src/main/resources/sql/postgres:/var/lib/postgresql/data/flayway
-      - ./postgres/pgdata:/var/lib/postgresql/data
-      #- ../movie-dataBase/src/main/resources/sql/postgres-data:/var/lib/postgresql/data
+#  postgres-db-comment:
+#    image: postgres:10.3
+#    environment:
+#      POSTGRES_PASSWORD: postgres
+#      POSTGRES_DB: comments
+#    ports:
+#      - "5432:5432"
+#    volumes:
+#      - data-comment:/var/lib/postgresql/data
+#      - ../movie-commentary-service/src/main/resources/sql/postgres:/var/lib/postgresql/data/flayway
+#     #- ../movie-dataBase/src/main/resources/sql/postgres-data:/var/lib/postgresql/data
+#
+#  postgres-db-movie:
+#    image: postgres:10.3
+#    environment:
+#      POSTGRES_PASSWORD: postgres
+#      POSTGRES_DB: movies
+#    ports:
+#      - "5433:5432"
+#    volumes:
+#      - data-movie:/var/lib/postgresql/data
+#      - ../movie-dataBase/src/main/resources/sql/postgres:/var/lib/postgresql/data/flayway
+#    #- ./postgres_movie/pgdata:/var/lib/postgresql/data
+#
+#  movie-commentary-service:
+#    image: movie-commentary-service
+#    build:
+#      context: ../movie-commentary-service
+#      dockerfile: Dockerfile
+#    ports:
+#      - "8087:8087"
+#    environment:
+#      DATABASE_HOST: postgres-db-comment
+#      DATABASE_PORT: 5432
+#    command: ["./wait-for-it.sh", "postgres-db-comment:5432"]
+#    volumes:
+#      - ../movie-commentary-service/src/main/resources/sql/postgres:/home/user/flyway
+#    depends_on:
+#      - discovery-server
+#      - postgres-db-comment
+#
+#  movieDataBase-service:
+#    image: data-base-movie-service
+#    build:
+#      context: ../movie-dataBase
+#      dockerfile: Dockerfile
+#    ports:
+#      - "8086:8086"
+#    environment:
+#      DATABASE_HOST: postgres-db-movie
+#      DATABASE_PORT: 5432
+#    command: ["./wait-for-it.sh", "postgres-db-movie:5432"]
+#    volumes:
+#      - ../movie-dataBase/src/main/resources/sql/postgres:/home/user/flyway
+#    depends_on:
+#      - discovery-server
+#      - postgres-db-movie
 
-  movie-commentary-service:
-    image: movie-commentary-service
-    build:
-      context: ../movie-commentary-service
-      dockerfile: Dockerfile
-    ports:
-      - "8087:8087"
-    environment:
-      DATABASE_HOST: postgres-db
-      DATABASE_PORT: 5432
-    command: ["./wait-for-it.sh", "postgres-db:5432"]
-    volumes:
-      - ../movie-commentary-service/src/main/resources/sql/postgres:/home/user/flyway
-    depends_on:
-      - discovery-server
-      - postgres-db
-
-  mysql-db:
-    image: mysql
-    environment:
-        MYSQL_DATABASE: users
-        MYSQL_USER: root
-        MYSQL_PASSWORD: mysql
-    ports:
-      - '3307:3306'
-    volumes:
-      - my-db:/var/lib/mysql
-
-  user-service:
-    image: user-service
-    build:
-      context: ../user-service
-      dockerfile: Dockerfile
-    ports:
-      - "8091:8091"
-    depends_on:
-      - mysql-db
-      - discovery-server
+#  mysql-db:
+#    image: mysql
+#    environment:
+#        MYSQL_DATABASE: users
+#        MYSQL_USER: root
+#        MYSQL_PASSWORD: mysql
+#    ports:
+#      - '3307:3306'
+#    volumes:
+#      - my-db:/var/lib/mysql
+#
+#  user-service:
+#    image: user-service
+#    build:
+#      context: ../user-service
+#      dockerfile: Dockerfile
+#    ports:
+#      - "8091:8091"
+#    depends_on:
+#      - mysql-db
+#      - discovery-server
 
 volumes:
   my-db:
+  data-comment: {}
+  data-movie: {}
   mongo-volume:
     external: true
