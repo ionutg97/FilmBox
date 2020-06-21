@@ -2,16 +2,12 @@
 spring:
   application:
     name: movie-MongoDataBase-server
-server:
-  port: 8088
-
-dockerspring:
   data:
     mongodb:
-      authentication-database: admin
-      username: root
-      password: rootpassword
       uri: mongodb://localhost:27017/movie
+
+server:
+  port: 8088
 
 eureka:
   instance:
