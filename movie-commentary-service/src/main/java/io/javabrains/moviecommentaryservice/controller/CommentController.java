@@ -30,7 +30,7 @@ public class CommentController {
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity delete(@PathVariable String id, @RequestHeader("Authorization") String token ) {
+    public ResponseEntity delete(@PathVariable Long id, @RequestHeader("Authorization") String token ) {
         TokenSubject tokenSubject=Utils.validateRequestUsingJWT(token);
 
         if(tokenSubject!=null) {
@@ -40,7 +40,7 @@ public class CommentController {
                 return new ResponseEntity(HttpStatus.NO_CONTENT);
         }
         else
-            return new ResponseEntity<Comment>(HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
     }
 
     @GetMapping(value= "/{id}")

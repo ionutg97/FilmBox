@@ -53,7 +53,7 @@ public class CommentRepository {
         return comment;
     }
 
-    public int delete(String id) {
+    public Integer delete(Long id) {
         SqlParameterSource parameters = new MapSqlParameterSource()
                 .addValue("id", id);
 

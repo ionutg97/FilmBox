@@ -17,7 +17,7 @@ public class CommentService {
         return commentRepository.save(comment);
     }
 
-    public int delete(String id) {
+    public int delete(Long id) {
         return commentRepository.delete(id);
     }
 
