@@ -5,13 +5,14 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.1.2.RELEASE</version>
+		<version>2.2.4.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>io.javabrains</groupId>
 	<artifactId>dataBaseMovie</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>dataBaseMovie</name>
+	<packaging>jar</packaging>
 	<description>Microservice which write in movie Data Base.</description>
 
 	<properties>
@@ -97,18 +98,20 @@
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
 				<executions>
-				<execution>
-				<configuration>
-					<classifier>spring-boot</classifier>
-					<mainClass>
-
+					<execution>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
+						<configuration>
+							<classifier>spring-boot</classifier>
+							<mainClass>
 								io.javabrains.dataBaseMovie.DataBaseMovieApplication
-					</mainClass>
-				</configuration>
-				</execution>
+							</mainClass>
+						</configuration>
+					</execution>
 				</executions>
 			</plugin>
 		</plugins>
