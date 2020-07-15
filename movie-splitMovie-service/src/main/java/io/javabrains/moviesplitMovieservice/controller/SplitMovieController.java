@@ -60,6 +60,7 @@ public class SplitMovieController {
         else
             path = pathName;
 
+        log.info("The path file is "+path);
         TokenSubject tokenSubject = Utils.validateRequestUsingJWT(token);
         if (tokenSubject!=null)
         {
@@ -107,6 +108,7 @@ public class SplitMovieController {
 
     private JSONObject getMongoBodyRequestJSON(SplitMovie movieSplited) {
         JSONObject bodyMongo = new JSONObject();
+        log.info("Create mongo body request!");
         try {
             JSONArray array = new JSONArray();
             for (Chunck item : movieSplited.getListOfChunks()) {
@@ -117,6 +119,7 @@ public class SplitMovieController {
                 array.put(itemJSON);
             }
             bodyMongo.put("listOfChuncks", array);
+            log.info("Mongo body created! ");
         } catch (JSONException e) {
             log.error("Create mongo data base request json!");
             e.printStackTrace();
@@ -126,6 +129,7 @@ public class SplitMovieController {
 
     private JSONObject getDataBaseBodyRequestJSON(SplitMovie movieSplited) {
         JSONObject body = new JSONObject();
+        log.info("Create SQL body request!");
         try {
             body.put("fileName", movieSplited.getFileName());
             body.put("numberOfFiles", movieSplited.getNumberOfFiles());
@@ -134,7 +138,7 @@ public class SplitMovieController {
             body.put("idBlobStorage", 123456);
             body.put("videoId", movieSplited.getVideoId());
             body.put("idUser", movieSplited.getIdUser());
-
+            log.info("SQL body created "+body.toString());
         } catch (JSONException e) {
             log.error("Create data base request json!");
             e.printStackTrace();
@@ -144,12 +148,13 @@ public class SplitMovieController {
 
     @Profile("dev")
     private String setPathForProfile(String pathName) {
+        log.info("Map path to the server path!");
         List<String> words = new ArrayList<>();
         char[] splitPath = pathName.toCharArray();
         String word = "";
 
         for (int i = 0; i < splitPath.length; i++) {
-            if (splitPath[i] == '\\') {
+            if (splitPath[i] == '/') {
                 words.add(word);
                 word = "";
             } else

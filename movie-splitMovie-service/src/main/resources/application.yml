@@ -5,6 +5,8 @@ spring:
       active: default
 server:
   port: 8084
+  tomcat:
+    uri-encoding: utf-8
 
 logging:
   level:
